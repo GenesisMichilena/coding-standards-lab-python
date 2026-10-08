@@ -1,0 +1,32 @@
+Estudiante inválido: El ID debe ser un texto no vacío.
+Estudiante inválido: El nombre debe ser un texto no vacío.
+Nota inválida ignorada: 'Fifty'
+Nota inválida ignorada: -1
+Nota inválida ignorada: 101
+Reporte del estudiante con promedio exacto de 90:
+ID: S-001
+Name: Ana Torres
+Grades Count: 2
+Average: 90.00
+Final Grade: A
+Status: Passed
+Honor Roll: True
+Reporte del estudiante reprobado:
+ID: S-003
+Name: Luis Pérez
+Grades Count: 1
+Average: 55.00
+Final Grade: F
+Status: Failed
+Honor Roll: False
+Índice inválido rechazado: True
+Valor inexistente rechazado: True
+Eliminación por índice exitosa: True
+Eliminación por valor exitosa: True
+
+Codigo de salida de main(): 0
+Pruebas funcionales: aprobadas
+Validaciones, límites A-F, promedio 90, estados y Honor Roll: aprobados
+Eliminaciones por índice/valor, enteros enormes y otros inválidos: aprobados
+Reporte completo: aprobado
+Codigo de salida de las pruebas funcionales: 0

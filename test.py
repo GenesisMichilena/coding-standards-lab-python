@@ -23,8 +23,8 @@ class Student:
         if (
             isinstance(grade, bool)
             or not isinstance(grade, (int, float))
-            or not math.isfinite(grade)
             or not 0 <= grade <= 100
+            or not math.isfinite(grade)
         ):
             return False
 
@@ -66,28 +66,48 @@ class Student:
 
     @property
     def honor_roll(self):
-        """Indica si el promedio supera 90 y merece Honor Roll."""
+        """Indica si el promedio de 90 o más merece Honor Roll."""
         average = self.calculate_average()
-        return average is not None and average > 90
+        return average is not None and average >= 90
 
     def check_honor(self):
         """Devuelve el estado booleano de Honor Roll."""
         return self.honor_roll
 
     def delete_grade(self, index):
-        """Elimina la calificación ubicada en el índice indicado."""
+        """Elimina una calificación por índice; devuelve False si no existe."""
+        if (
+            isinstance(index, bool)
+            or not isinstance(index, int)
+            or not 0 <= index < len(self.grades)
+        ):
+            return False
         del self.grades[index]
+        return True
+
+    def delete_grade_by_value(self, grade):
+        """Elimina la primera nota igual al valor indicado, si existe."""
+        try:
+            self.grades.remove(grade)
+        except ValueError:
+            return False
+        return True
 
     def report(self):
-        """Imprime los datos y el resultado académico del estudiante."""
-        print("ID: " + self.student_id)
-        print("Name is: " + self.name)
-        print("Grades Count: " + len(self.grades))
-        print("Final Grade = " + self.letter_grade)
+        """Imprime el reporte académico completo del estudiante."""
+        average = self.calculate_average()
+        average_text = f"{average:.2f}" if average is not None else "N/A"
+        print(f"ID: {self.student_id}")
+        print(f"Name: {self.name}")
+        print(f"Grades Count: {len(self.grades)}")
+        print(f"Average: {average_text}")
+        print(f"Final Grade: {self.letter_grade}")
+        print(f"Status: {self.pass_status}")
+        print(f"Honor Roll: {self.honor_roll}")
 
 
 def main():
-    """Demuestra validaciones, promedios y estados sin interrumpirse."""
+    """Demuestra los requisitos académicos y el manejo de errores."""
     for student_id, name in (("", "Ana"), ("S-002", " ")):
         try:
             Student(student_id, name)
@@ -95,18 +115,31 @@ def main():
             print(f"Estudiante inválido: {error}")
 
     honor_student = Student("S-001", "Ana Torres")
-    for grade in (100, 95, "Fifty", -1, 101):
+    for grade in (100, 80, "Fifty", -1, 101):
         if not honor_student.add_grade(grade):
             print(f"Nota inválida ignorada: {grade!r}")
 
-    print(f"Promedio: {honor_student.calculate_average():.2f}")
-    print(f"Calificación: {honor_student.letter_grade}")
-    print(f"Estado: {honor_student.pass_status}")
-    print(f"Honor Roll: {honor_student.honor_roll}")
+    print("Reporte del estudiante con promedio exacto de 90:")
+    honor_student.report()
 
     failing_student = Student("S-003", "Luis Pérez")
     failing_student.add_grade(55)
-    print(f"Estado para {failing_student.name}: {failing_student.pass_status}")
+    print("Reporte del estudiante reprobado:")
+    failing_student.report()
+
+    deletion_student = Student("S-004", "Caso de eliminación")
+    deletion_student.add_grade(0)
+    deletion_student.add_grade(100)
+    print(f"Índice inválido rechazado: {not deletion_student.delete_grade(5)}")
+    print(
+        "Valor inexistente rechazado: "
+        f"{not deletion_student.delete_grade_by_value(50)}"
+    )
+    print(f"Eliminación por índice exitosa: {deletion_student.delete_grade(0)}")
+    print(
+        "Eliminación por valor exitosa: "
+        f"{deletion_student.delete_grade_by_value(100)}"
+    )
 
 
 if __name__ == "__main__":
